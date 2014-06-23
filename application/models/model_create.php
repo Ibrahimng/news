@@ -4,6 +4,7 @@ class Model_Create extends Model
 {
     public function set_data()
     {
+
         $info = "";
         if (isset($_POST['add'])) {
 
@@ -48,9 +49,10 @@ class Model_Create extends Model
         if ($this->mysqli->errno) {
             $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
         }
+        header ("Location: /");
 }
 
-        return $info;
+
     }
     public function get_data()
     {

@@ -1,0 +1,28 @@
+div.error {
+    color: orangered;
+}
+img {
+    width: 200px;
+    height: 100px;
+}
+
+table {
+    width: 80%;
+    background: #99FFFF;
+    border-spacing: 1px;
+}
+
+td, th {
+    padding: 5px;
+}
+
+th {
+    background: #003399;
+    color: #FFFFFF;
+}
+
+td {
+    background: #CCFFFF;
+}
+
+tr:hover td { background: #00CCCC !important; }

@@ -1,13 +1,14 @@
 
 <h1>Добавьте новость по вкусу</h1>
-<form name="new-article" enctype="multipart/form-data" action="create" method="post">
-    Дата:<input class="datepicker" type="text" name="a-date"><br>
-    Заголовок:<input type="text" name="a-title"><br>
-    Текст:<textarea name="a-text" cols="30" rows="10"></textarea><br>
+<form id="new-article-form" name="new-article" enctype="multipart/form-data" action="create" method="post">
+    Дата:<input id="adate" class="datepicker" type="text" name="a-date"><br>
+    Заголовок:<input id="atitle" type="text" name="a-title"><br>
+    Текст:<textarea id="atext" name="a-text" cols="30" rows="10"></textarea><br>
 <!--    <input type="hidden" name="MAX_FILE_SIZE" value="5000" />-->
     Фотография:<input type="file" name="a-file">
     <input type="submit" name="add" value="Добавить">
 </form>
+<div class="error"></div>
 <?php echo $data; ?>
 <script>
     $(document).ready(function() {
@@ -37,4 +38,72 @@
             "option", "showAnim", "clip"
         );
     });
+
+    $('#new-article-form').bind('submit', function(event) {
+        $('div.error').text("");
+        $('#atitle').each(function() {
+            var cur_length = $(this).val().trim().length;
+            if(cur_length > 50 || cur_length < 3) {
+                event.preventDefault();
+                $(this).css('border', '2px solid orangered');
+                $('div.error').append("В названии новости должно быть не менее 3-х симоволов и не более 50<br>");
+            }
+            else
+                $(this).css('border', '');
+        });
+        $('#atext').each(function() {
+            var cur_length = $(this).val().trim().length;
+            if(cur_length > 140 || cur_length < 10) {
+                event.preventDefault();
+                $(this).css('border', '2px solid orangered');
+                $('div.error').append("В тексте новости должно быть не менее 10 симоволов и не более 140<br>");
+            }
+            else
+                $(this).css('border', '');
+        });
+
+        $('#adate').each(function(){
+            var txtVal =  $('#adate').val();
+            if(!isDate(txtVal)) {
+                $(this).css('border', '2px solid orangered');
+                $('div.error').append("Дата должна быть в формате дд.мм.ГГГГ<br>");
+            }
+            else {
+                $(this).css('border', '');
+            }
+        });
+    });
+
+    function isDate(txtDate)
+    {
+        var currVal = txtDate;
+        if(currVal == '')
+            return false;
+
+        //Declare Regex
+        var rxDatePattern = /^(\d{1,2})(\/|.)(\d{1,2})(\/|.)(\d{4})$/;
+        var dtArray = currVal.match(rxDatePattern); // is format OK?
+
+        if (dtArray == null)
+            return false;
+
+        //Checks for mm/dd/yyyy format.
+        dtMonth = dtArray[3];
+        dtDay= dtArray[1];
+        dtYear = dtArray[5];
+
+        if (dtMonth < 1 || dtMonth > 12)
+            return false;
+        else if (dtDay < 1 || dtDay> 31)
+            return false;
+        else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31)
+            return false;
+        else if (dtMonth == 2)
+        {
+            var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+            if (dtDay> 29 || (dtDay ==29 && !isleap))
+                return false;
+        }
+        return true;
+    }
 </script>

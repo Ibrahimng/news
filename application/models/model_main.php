@@ -5,7 +5,7 @@ class Model_Main extends Model
     public function get_data()
     {
         $articles = array();
-        $query = "SELECT * FROM article";
+        $query = "select * from article order by id desc";
 
         if ($result = $this->mysqli->query($query)) {
 
