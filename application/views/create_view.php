@@ -4,7 +4,7 @@
     Дата:<input class="datepicker" type="text" name="a-date"><br>
     Заголовок:<input type="text" name="a-title"><br>
     Текст:<textarea name="a-text" cols="30" rows="10"></textarea><br>
-<!--    <input type="hidden" name="MAX_FILE_SIZE" value="2048" />-->
+<!--    <input type="hidden" name="MAX_FILE_SIZE" value="5000" />-->
     Фотография:<input type="file" name="a-file">
     <input type="submit" name="add" value="Добавить">
 </form>

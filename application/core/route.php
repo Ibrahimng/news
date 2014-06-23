@@ -39,6 +39,7 @@ class Route
         // подцепляем файл с классом контроллера
         $controller_file = strtolower($controller_name).'.php';
         $controller_path = "application/controllers/".$controller_file;
+
         if(file_exists($controller_path))
         {
             include "application/controllers/".$controller_file;
@@ -69,7 +70,7 @@ class Route
 
     }
 
-    function ErrorPage404()
+    function ErrorPage404($msg)
     {
         $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
         header('HTTP/1.1 404 Not Found');

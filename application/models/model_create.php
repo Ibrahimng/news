@@ -4,25 +4,14 @@ class Model_Create extends Model
 {
     public function set_data()
     {
-        $host = 'localhost';
-        $user = 'root';
-        $password = 'muscle';
-        $database = 'articles';
-
+        $info = "";
         if (isset($_POST['add'])) {
 
-        $mysqli = new mysqli($host, $user, $password, $database);
-        if ($mysqli->connect_error)
-            die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
-        mysqli_set_charset($mysqli, "utf8");
-
         $dir = './upload/';
-
         $a_filepath = "";
-
-        $a_title = mysql_real_escape_string(isset($_POST['a-title']) ? $_POST['a-title'] : "");
-        $a_text = mysql_real_escape_string(isset($_POST['a-text']) ? $_POST['a-text'] : "");
-        $a_date = date("Y-m-d H:i:s", isset($_POST['a-date']) ? strtotime($_POST['a-date']): time());
+        $a_title = mysql_real_escape_string(!empty($_POST['a-title']) ? $_POST['a-title'] : "");
+        $a_text = mysql_real_escape_string(!empty($_POST['a-text']) ? $_POST['a-text'] : "");
+        $a_date = !empty($_POST['a-date']) ? date("Y-m-d H:i:s", strtotime($_POST['a-date'])) : '0000-00-00 00:00:00';
 
         //если есть файл
         if (isset($_FILES["a-file"])) {
@@ -45,19 +34,19 @@ class Model_Create extends Model
 
                 move_uploaded_file($upfile, $upfile_name);
                 $a_filepath = $upfile_name;
-                $a_filepath = $mysqli->real_escape_string($a_filepath);
+                $a_filepath = $this->mysqli->real_escape_string($a_filepath);
             }
             else {
-                $info = $error_code . "what?";
+                $info = $error_code;
             }
         }
 
         //записываю в БД
-        header('Content-Type: text/html; charset=utf-8');
-            $q = "INSERT INTO article (a_date, a_title, a_text, a_filepath) values ('$a_date', '$a_title', '$a_text', '$a_filepath')";
-        $mysqli->query($q);
-        if ($mysqli->errno) {
-            $info .= 'Select Error (' . $mysqli->errno . ') ' . $mysqli->error;
+
+        $q = "INSERT INTO article (a_date, a_title, a_text, a_filepath) values ('$a_date', '$a_title', '$a_text', '$a_filepath')";
+        $this->mysqli->query($q);
+        if ($this->mysqli->errno) {
+            $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
         }
 }
 
