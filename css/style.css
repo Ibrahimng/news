@@ -6,23 +6,24 @@ img {
     height: 200px;
 }
 
-table {
+table#news-list {
     width: 80%;
     background: #99FFFF;
     border-spacing: 1px;
 }
 
-td, th {
+table#news-list td, th {
     padding: 5px;
 }
 
-th {
+table#news-list th {
     background: #003399;
     color: #FFFFFF;
 }
 
-td {
+table#news-list td {
     background: #CCFFFF;
 }
 
-tr:hover td { background: #00CCCC !important; }
+table#news-list tr:hover td { background: #00CCCC !important; }
+

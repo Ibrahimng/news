@@ -2,18 +2,18 @@
 <h1>Добавьте новость по вкусу</h1>
 <form id="new-article-form" name="new-article" enctype="multipart/form-data" action="create" method="post">
     <table id="add-article">
-    <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date"></td></tr>
-    <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title"></td></tr>
-    <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
-    <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"></textarea></td></tr>
-    <tr><td></td><td><input type="submit" name="add" value="Добавить"></td></tr>
+        <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo $data['a_date']; ?>'></td></tr>
+        <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title"></td></tr>
+        <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
+        <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"></textarea></td></tr>
+        <tr><td></td><td><input type="submit" name="add" value="Добавить"></td></tr>
     </table>
 </form>
 <div class="error">
-<?php if(isset($data)){
+    <?php if(isset($data)){
         foreach($data as $msg)
             echo $msg."<br>";
-        } ?>
+    } ?>
 </div>
 <script>
     $(document).ready(function() {

@@ -29,23 +29,15 @@ class Model_Create extends Model
 
             $upfile = $_FILES['a-file']['tmp_name'];
             $upfile_name = $_FILES['a-file']['name'];
-            $upfile_size = $_FILES['a-file']['size'];
-            $upfile_type = $_FILES['a-file']['type'];
             $error_code = $_FILES['a-file']['error'];
-
 
             if($error_code == 0) {
 
-                $info .= "Filename on server: " . $upfile . "<br>";
-                $info .= "Filename on user desktop: " . $upfile_name . "<br>";
-                $info .= "MIME type of file: " . $upfile_type . "<br>";
-                $info .= "File size: " . $upfile_size . "<br>";
-
                 $upfile_name = $dir . $upfile_name;
-
                 move_uploaded_file($upfile, $upfile_name);
                 $a_filepath = $upfile_name;
                 $a_filepath = $this->mysqli->real_escape_string($a_filepath);
+
             }
             else {
                 switch ($error_code) {
@@ -80,23 +72,5 @@ class Model_Create extends Model
 }
 
 
-    }
-    public function get_data()
-    {
-
-        return array(
-
-            array(
-                'Year' => '2012',
-                'Site' => 'http://DunkelBeer.ru',
-                'Description' => 'Промо-сайт темного пива Dunkel от немецкого производителя Löwenbraü выпускаемого в России пивоваренной компанией "CАН ИнБев".'
-            ),
-            array(
-                'Year' => '2012',
-                'Site' => 'http://ZopoMobile.ru',
-                'Description' => 'Русскоязычный каталог китайских телефонов компании Zopo на базе Android OS и аксессуаров к ним.'
-            ),
-// todo
-        );
     }
 }
