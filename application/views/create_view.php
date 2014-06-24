@@ -8,8 +8,12 @@
     Фотография:<input type="file" name="a-file">
     <input type="submit" name="add" value="Добавить">
 </form>
-<div class="error"></div>
-<?php echo $data; ?>
+<div class="error">
+<?php if(isset($data)){
+        foreach($data as $msg)
+            echo $msg."<br>";
+        } ?>
+</div>
 <script>
     $(document).ready(function() {
         $.datepicker.regional['ru'] = {
@@ -39,40 +43,40 @@
         );
     });
 
-    $('#new-article-form').bind('submit', function(event) {
-        $('div.error').text("");
-        $('#atitle').each(function() {
-            var cur_length = $(this).val().trim().length;
-            if(cur_length > 50 || cur_length < 3) {
-                event.preventDefault();
-                $(this).css('border', '2px solid orangered');
-                $('div.error').append("В названии новости должно быть не менее 3-х симоволов и не более 50<br>");
-            }
-            else
-                $(this).css('border', '');
-        });
-        $('#atext').each(function() {
-            var cur_length = $(this).val().trim().length;
-            if(cur_length > 140 || cur_length < 10) {
-                event.preventDefault();
-                $(this).css('border', '2px solid orangered');
-                $('div.error').append("В тексте новости должно быть не менее 10 симоволов и не более 140<br>");
-            }
-            else
-                $(this).css('border', '');
-        });
-
-        $('#adate').each(function(){
-            var txtVal =  $('#adate').val();
-            if(!isDate(txtVal)) {
-                $(this).css('border', '2px solid orangered');
-                $('div.error').append("Дата должна быть в формате дд.мм.ГГГГ<br>");
-            }
-            else {
-                $(this).css('border', '');
-            }
-        });
-    });
+//    $('#new-article-form').bind('submit', function(event) {
+//        $('div.error').text("");
+//        $('#atitle').each(function() {
+//            var cur_length = $(this).val().trim().length;
+//            if(cur_length > 50 || cur_length < 3) {
+//                event.preventDefault();
+//                $(this).css('border', '2px solid orangered');
+//                $('div.error').append("В названии новости должно быть не менее 3-х симоволов и не более 50<br>");
+//            }
+//            else
+//                $(this).css('border', '');
+//        });
+//        $('#atext').each(function() {
+//            var cur_length = $(this).val().trim().length;
+//            if(cur_length > 140 || cur_length < 10) {
+//                event.preventDefault();
+//                $(this).css('border', '2px solid orangered');
+//                $('div.error').append("В тексте новости должно быть не менее 10 симоволов и не более 140<br>");
+//            }
+//            else
+//                $(this).css('border', '');
+//        });
+//
+//        $('#adate').each(function(){
+//            var txtVal =  $('#adate').val();
+//            if(!isDate(txtVal)) {
+//                $(this).css('border', '2px solid orangered');
+//                $('div.error').append("Дата должна быть в формате дд.мм.ГГГГ<br>");
+//            }
+//            else {
+//                $(this).css('border', '');
+//            }
+//        });
+//    });
 
     function isDate(txtDate)
     {

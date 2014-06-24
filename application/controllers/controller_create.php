@@ -11,8 +11,8 @@ class Controller_Create extends Controller
 
     function action_index()
     {
-        $this->model->set_data();
-        $this->view->generate('create_view.php', 'template_view.php');
+        $errors = $this->model->set_data();
+        $this->view->generate('create_view.php', 'template_view.php', $errors);
 
 
     }
