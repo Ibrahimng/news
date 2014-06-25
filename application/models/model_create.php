@@ -28,16 +28,12 @@ class Model_Create extends Model
         if (isset($_FILES["a-file"])) {
 
             $upfile = $_FILES['a-file']['tmp_name'];
-            $upfile_name = $_FILES['a-file']['name'];
             $error_code = $_FILES['a-file']['error'];
 
             if($error_code == 0) {
-
-                $upfile_name = $dir . $upfile_name;
-                move_uploaded_file($upfile, $upfile_name);
+                $upfile_name = "photo_" . time() . ".jpg";
+                move_uploaded_file($upfile, $dir . $upfile_name);
                 $a_filepath = $upfile_name;
-                $a_filepath = $this->mysqli->real_escape_string($a_filepath);
-
             }
             else {
                 switch ($error_code) {

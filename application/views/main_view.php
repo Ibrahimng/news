@@ -7,7 +7,7 @@
 
     foreach($data as $row)
     {
-        echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='" . $row['a_filepath'] . "'></td><td><form action='edit' method='get'><button name='id' value='". $row['id'] . "' type='submit'>Изменить</button></form></td></tr>";
+        echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='/upload/" . $row['a_filepath'] . "'></td><td><a href='/edit/index/?id=" . $row['id'] . "'>Изменить</a></td></tr>";
     }
 
     ?>

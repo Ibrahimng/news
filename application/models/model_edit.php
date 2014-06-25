@@ -18,7 +18,7 @@ class Model_Edit extends Model
             'errors' => array()
         );
 
-        if (!isset($_POST['a-id']) or empty($_POST['a-id']) or !is_int($_POST['a-id'])) {
+        if (!isset($_POST['a-id']) or empty($_POST['a-id'])) {
             $errors[] = "На задан id новости для внесения изменений";
         }
 
@@ -47,15 +47,12 @@ class Model_Edit extends Model
         if (isset($_FILES["a-file"])) {
 
             $upfile = $_FILES['a-file']['tmp_name'];
-            $upfile_name = $_FILES['a-file']['name'];
             $error_code = $_FILES['a-file']['error'];
 
             if($error_code == 0) {
-
-                $upfile_name = $dir . $upfile_name;
-                move_uploaded_file($upfile, $upfile_name);
+                $upfile_name = "photo_" . time() . ".jpg";
+                move_uploaded_file($upfile, $dir . $upfile_name);
                 $a_filepath = $upfile_name;
-                $a_filepath = $this->mysqli->real_escape_string($a_filepath);
                 $return['data']['a_filepath'] = $a_filepath;
 
             }
@@ -75,7 +72,7 @@ class Model_Edit extends Model
         return $return;
     }
 
-    public function get_atricle()
+    public function get_article()
     {
         $data_to_paste = array();
 
@@ -94,7 +91,21 @@ class Model_Edit extends Model
             }
             return $data_to_paste;
         }
+    }
 
+    public function update_article($data)
+    {
+        $data = array_map(function ($v) {
+            return "'" . str_replace("'", '"', $v) . "'";
+        }, $data);
+
+        $q = "update article set a_title=" . $data['a_title'] . ", a_text=" . $data['a_text'] . ", a_date=" . $data['a_date'] . ", a_filepath=" . $data['a_filepath'] . " where id=" . $data['a_id'];
+
+        $this->mysqli->query($q);
+        if ($this->mysqli->errno) {
+            $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+        }
+        header("Location: /");
 
     }
 }
