@@ -8,7 +8,7 @@ img {
 
 table#news-list {
     width: 80%;
-    background: #99FFFF;
+    background: #FFFF66;
     border-spacing: 1px;
 }
 
@@ -17,13 +17,13 @@ table#news-list td, th {
 }
 
 table#news-list th {
-    background: #003399;
-    color: #FFFFFF;
+    background: #FFFF99;
+    color: #000000;
 }
 
 table#news-list td {
-    background: #CCFFFF;
+    background: #FFFFCC;
 }
 
-table#news-list tr:hover td { background: #00CCCC !important; }
+table#news-list tr:hover td { background: #FFFF33 !important; }
 

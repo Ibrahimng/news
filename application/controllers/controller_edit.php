@@ -11,9 +11,46 @@ class Controller_Edit extends Controller
 
     function action_index()
     {
-        $errors = $this->model->set_data();
-        $this->view->generate('create_view.php', 'template_view.php', $errors);
+        $data = $this->model->get_atricle();
+
+        $data['errors'] = array();
+
+        if (isset($_POST['save'])) {
+
+            $info = "";
+
+            $validationResult = $this->model->validate(array(
+                'post'  => $_POST,
+                'files' => $_FILES
+            ));
+
+            //записываю в БД
+            if (!$validationResult['error']) {
+//                $validationResult['data'] = array_map(function($v) {
+//                    return "'" . str_replace("'", '"', $v) . "'";
+//                }, $validationResult['data']);
+
+            $atitle = $validationResult['data']['a_title'];
+            $atext = $validationResult['data']['a_text'];
+            $adate = $validationResult['data']['a_date'];
+            $aid = $validationResult['data']['a_id'];
+
+                $q = "update article set a_title=$atitle, a_text=$atext , a_date=$adate where id=$aid";
+                echo "<pre>";
+                var_dump($q);
+                die();
+                $this->mysqli->query($q);
+                if ($this->mysqli->errno) {
+                    $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+                }
+                header ("Location: /");
+            }
+            $data['errors'] = $validationResult['errors'];
+        }
+
+        $this->view->generate('edit_view.php', 'template_view.php', $data);
 
 
     }
+
 }

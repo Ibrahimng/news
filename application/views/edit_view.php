@@ -1,17 +1,20 @@
 
-<h1>Добавьте новость по вкусу</h1>
-<form id="new-article-form" name="new-article" enctype="multipart/form-data" action="create" method="post">
+<h1>Редактирование новости</h1>
+<form id="new-article-form" name="edit-article" enctype="multipart/form-data" action="/edit" method="post">
     <table id="add-article">
-        <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo $data['a_date']; ?>'></td></tr>
-        <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title"></td></tr>
+        <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo date("d.m.Y", strtotime($data['a_date'])); ?>'></td></tr>
+        <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title" value='<?php echo $data['a_title'];?>'></td></tr>
         <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
-        <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"></textarea></td></tr>
-        <tr><td></td><td><input type="submit" name="add" value="Добавить"></td></tr>
+        <tr><td></td><td><img src='<?php echo $data['a_filepath'];?>'> </td></tr>
+        <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"><?php echo $data['a_text'];?></textarea></td></tr>
+        <tr><td></td><td><input type="submit" name="save" value="Добавить"></td></tr>
+        <input type="hidden" name="a-id" value="<?php echo $data['id'];?>">
+"
     </table>
 </form>
 <div class="error">
-    <?php if(isset($data)){
-        foreach($data as $msg)
+    <?php if(isset($data['errors'])){
+        foreach($data['errors'] as $msg)
             echo $msg."<br>";
     } ?>
 </div>
@@ -46,37 +49,32 @@
 
     $('#new-article-form').bind('submit', function(event) {
         $('div.error').text("");
-        $('#atitle').each(function() {
-            var cur_length = $(this).val().trim().length;
+            var cur_length = $('#atitle').val().trim().length;
             if(cur_length > 50 || cur_length < 3) {
                 event.preventDefault();
-                $(this).css('border', '2px solid orangered');
+                $('#atitle').css('border', '2px solid orangered');
                 $('div.error').append("В названии новости должно быть не менее 3-х симоволов и не более 50<br>");
             }
             else
-                $(this).css('border', '');
-        });
-        $('#atext').each(function() {
-            var cur_length = $(this).val().trim().length;
+                $('#atitle').css('border', '');
+
+            var cur_length = $('#atext').val().trim().length;
             if(cur_length > 140 || cur_length < 10) {
                 event.preventDefault();
-                $(this).css('border', '2px solid orangered');
+                $('#atext').css('border', '2px solid orangered');
                 $('div.error').append("В тексте новости должно быть не менее 10 симоволов и не более 140<br>");
             }
             else
-                $(this).css('border', '');
-        });
+                $('#atext').css('border', '');
 
-        $('#adate').each(function(){
             var txtVal =  $('#adate').val();
             if(!isDate(txtVal)) {
-                $(this).css('border', '2px solid orangered');
+                $('#adate').css('border', '2px solid orangered');
                 $('div.error').append("Дата должна быть в формате дд.мм.ГГГГ<br>");
             }
             else {
-                $(this).css('border', '');
+                $('#adate').css('border', '');
             }
-        });
     });
 
     function isDate(txtDate)
