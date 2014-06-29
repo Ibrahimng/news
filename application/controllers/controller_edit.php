@@ -12,17 +12,23 @@
         function action_index()
         {
             $data = $this->model->get_article();
+;
+//            echo "<pre>";
+//            var_dump($data);
+//            echo "</pre>";
 
             $data['errors'] = array();
 
             if (isset($_POST['save'])) {
 
-                $info = "";
-
                 $validationResult = $this->model->validate(array(
                     'post'  => $_POST,
                     'files' => $_FILES
                 ));
+
+//                echo "<pre>";
+//var_dump($validationResult);
+//die();
 
                 //записываю в БД
                 if (!$validationResult['error']) {

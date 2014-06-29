@@ -2,9 +2,11 @@
 
 class Model_Edit extends Model
 {
+    public $dir = './upload/';
+    public $info = "";
     public function validate($data = array()) {
 
-        $dir = './upload/';
+
         $errors = array();
         $return = array(
             'error'  => 1,
@@ -13,7 +15,9 @@ class Model_Edit extends Model
                 'a_title' => '',
                 'a_text' => '',
                 'a_filepath' => '',
-                'a_id' => ''
+                'a_hidden' => '',
+                'a_id' => '',
+                'a_old_filepath' => ''
             ),
             'errors' => array()
         );
@@ -42,6 +46,10 @@ class Model_Edit extends Model
         $return['data']['a_title'] = mysql_real_escape_string($_POST['a-title']);
         $return['data']['a_text'] = mysql_real_escape_string($_POST['a-text']);
         $return['data']['a_id'] = mysql_real_escape_string($_POST['a-id']);
+        $return['data']['a_old_filepath'] = mysql_real_escape_string($_POST['a-old-filepath']);
+
+        if (isset($_POST['a-hidden']))
+            $return['data']['a_hidden'] = mysql_real_escape_string($_POST['a-hidden']);
 
         //если есть файл
         if (isset($_FILES["a-file"])) {
@@ -51,7 +59,7 @@ class Model_Edit extends Model
 
             if($error_code == 0) {
                 $upfile_name = "photo_" . time() . ".jpg";
-                move_uploaded_file($upfile, $dir . $upfile_name);
+                move_uploaded_file($upfile, $this->dir . $upfile_name);
                 $a_filepath = $upfile_name;
                 $return['data']['a_filepath'] = $a_filepath;
 
@@ -95,16 +103,29 @@ class Model_Edit extends Model
 
     public function update_article($data)
     {
+        $old_file_path = $this->dir . $data['a_old_filepath'];
+
         $data = array_map(function ($v) {
             return "'" . str_replace("'", '"', $v) . "'";
         }, $data);
 
-        $q = "update article set a_title=" . $data['a_title'] . ", a_text=" . $data['a_text'] . ", a_date=" . $data['a_date'] . ", a_filepath=" . $data['a_filepath'] . " where id=" . $data['a_id'];
+        $q = "update article set a_title=" . $data['a_title'] . ", a_text=" . $data['a_text'] . ", a_date=" . $data['a_date'] . ", a_filepath=" . $data['a_filepath'] . ", a_hidden=" . $data['a_hidden']  . " where id=" . $data['a_id'];
 
         $this->mysqli->query($q);
         if ($this->mysqli->errno) {
-            $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+            $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
         }
+
+        //если файл изменен, удаляю старый файл
+        if ($data['a_filepath'] != $data['a_old_filepath'] and $data['a_filepath'] != "''") {
+//            echo "<pre>";
+//            var_dump($old_file_path);
+//            var_dump($data['a_filepath']);
+//            print_r($data['a_filepath'] != "''");
+//            die();
+            unlink($old_file_path);
+        }
+
         header("Location: /");
 
     }
