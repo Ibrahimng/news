@@ -7,6 +7,7 @@ class Model_Edit extends Model
     public function validate($data = array()) {
 
 
+        echo "<pre>";
         $errors = array();
         $return = array(
             'error'  => 1,
@@ -19,7 +20,8 @@ class Model_Edit extends Model
                 'a_id' => '',
                 'a_old_filepath' => ''
             ),
-            'errors' => array()
+            'errors' => array(),
+            'tags' => array()
         );
 
         if (!isset($_POST['a-id']) or empty($_POST['a-id'])) {
@@ -43,10 +45,16 @@ class Model_Edit extends Model
                 $errors[] = "Допустимый формат для даты: дд.мм.ГГГГ";
         }
 
+        $tags = $_POST['a-tag'];
+        if (is_array($tags)) {
+            $return['tags'] = $tags;
+        }
+
         $return['data']['a_title'] = mysql_real_escape_string($_POST['a-title']);
         $return['data']['a_text'] = mysql_real_escape_string($_POST['a-text']);
         $return['data']['a_id'] = mysql_real_escape_string($_POST['a-id']);
         $return['data']['a_old_filepath'] = mysql_real_escape_string($_POST['a-old-filepath']);
+
 
         if (isset($_POST['a-hidden']))
             $return['data']['a_hidden'] = mysql_real_escape_string($_POST['a-hidden']);
@@ -82,7 +90,10 @@ class Model_Edit extends Model
 
     public function get_article()
     {
-        $data_to_paste = array();
+        $data_to_paste = array(
+            'article' => array(),
+            'tag' => array()
+        );
 
         if (isset($_GET['id'])) {
             $article_id = (int)mysql_real_escape_string($_GET['id']);
@@ -93,15 +104,28 @@ class Model_Edit extends Model
 
                 $row = $result->fetch_assoc();
                 if($row)
-                    $data_to_paste = $row;
+                    $data_to_paste['article'] = $row;
 
                 $result->free();
             }
+
+            $query = "select * from tag";
+            if ($result = $this->mysqli->query($query)) {
+
+                while ($row = $result->fetch_assoc()) {
+
+                    array_push($data_to_paste['tag'], $row);
+
+                }
+
+                $result->free();
+            }
+
             return $data_to_paste;
         }
     }
 
-    public function update_article($data)
+    public function update_article($data, $tags)
     {
         $old_file_path = $this->dir . $data['a_old_filepath'];
 
@@ -124,6 +148,26 @@ class Model_Edit extends Model
 //            print_r($data['a_filepath'] != "''");
 //            die();
             unlink($old_file_path);
+        }
+//        echo "<pre>";
+//        var_dump($tags);
+//        die();
+        //удалим все старые записи о тегах
+        $q = "delete from at_dict where article_id=" . $data['a_id'];
+        $this->mysqli->query($q);
+        if ($this->mysqli->errno) {
+            $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+        }
+        //сохраним в базе информацию о тегах
+        foreach ($tags as $key => $value) {
+            $q = "insert into at_dict (article_id, tag_id) values (" . $data['a_id'] . "," . $value . ")";
+//                        echo "<pre>";
+//                        var_dump($q);
+//                        die();
+            $this->mysqli->query($q);
+            if ($this->mysqli->errno) {
+                $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+            }
         }
 
         header("Location: /");

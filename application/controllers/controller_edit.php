@@ -33,7 +33,7 @@
                 //записываю в БД
                 if (!$validationResult['error']) {
 
-                    $this->model->update_article($validationResult['data']);
+                    $this->model->update_article($validationResult['data'], $validationResult['tags']);
                 }
                 $data['errors'] = $validationResult['errors'];
             }

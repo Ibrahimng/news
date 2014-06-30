@@ -2,16 +2,22 @@
 <h1>Редактирование новости</h1>
 <form id="new-article-form" name="edit-article" enctype="multipart/form-data" action="/edit" method="post">
     <table id="add-article">
-        <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo date("d.m.Y", strtotime($data['a_date'])); ?>'></td></tr>
-        <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title" value='<?php echo $data['a_title'];?>'></td></tr>
+        <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo date("d.m.Y", strtotime($data['article']['a_date'])); ?>'></td></tr>
+        <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title" value='<?php echo $data['article']['a_title'];?>'></td></tr>
         <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
-        <tr><td></td><td><img src='/upload/<?php echo $data['a_filepath'];?>'> </td></tr>
-        <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"><?php echo $data['a_text'];?></textarea></td></tr>
-        <tr><td align="right"><label>Скрытая</label></td><td><input type="checkbox" name="a-hidden" value="1" <?php if($data['a_hidden'] == "1") { echo " checked";}?> /></td></tr>
-        <tr><td align="right"><label>Теги</label></td><td><select name="a-tag[]" size="10" multiple></select></td></tr>
-        <tr><td></td><td><input type="submit" name="save" value="Добавить"></td></tr>
-        <input type="hidden" name="a-id" value="<?php echo $data['id'];?>">
-        <input type="hidden" name="a-old-filepath" value="<?php echo $data['a_filepath'];?>">
+        <tr><td></td><td><img src='/upload/<?php echo $data['article']['a_filepath'];?>'> </td></tr>
+        <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"><?php echo $data['article']['a_text'];?></textarea></td></tr>
+        <tr><td align="right"><label>Скрытая</label></td><td><input type="checkbox" name="a-hidden" value="1" <?php if($data['article']['a_hidden'] == "1") { echo " checked";}?> /></td></tr>
+        <tr><td align="right"><label>Теги</label></td><td><select name="a-tag[]" size="10" multiple>
+                    <?php
+                        foreach ($data['tag'] as $tag) {
+                            echo "<option value='" . $tag['id'] . "'>" . $tag['t_name'] . "</option>";
+                    } ?>
+
+        </select></td></tr>
+        <tr><td></td><td><input type="submit" name="save" value="Сохранить"></td></tr>
+        <input type="hidden" name="a-id" value="<?php echo $data['article']['id'];?>">
+        <input type="hidden" name="a-old-filepath" value="<?php echo $data['article']['a_filepath'];?>">
     </table>
 </form>
 <div class="error">
