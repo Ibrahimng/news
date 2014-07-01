@@ -11,10 +11,10 @@ class Model_Create extends Model
 
         $errors = array();
 
-        if (!isset($_POST['a-title']) or empty($_POST['a-title']) or strlen($_POST['a-title']) < 3 or strlen($_POST['a-title']) > 50) {
+        if (!isset($_POST['a-title']) or empty($_POST['a-title']) or mb_strlen($_POST['a-title'], 'utf-8') < 3 or mb_strlen($_POST['a-title'], 'utf-8') > 50) {
             $errors[] = "У новости должно быть название, длиной от 3 до 50 символов";
         }
-        if (!isset($_POST['a-text']) or empty($_POST['a-text']) or strlen($_POST['a-text']) < 10 or strlen($_POST['a-text']) > 140) {
+        if (!isset($_POST['a-text']) or empty($_POST['a-text']) or mb_strlen($_POST['a-text'], 'utf-8') < 10 or mb_strlen($_POST['a-text'], 'utf-8') > 140) {
             $errors[] = "У новости должен быть текст, длиной от 10 до 140 символов";
         }
         if (!isset($_POST['a-date']) or empty($_POST['a-date'])) {

@@ -28,10 +28,10 @@ class Model_Edit extends Model
             $errors[] = "На задан id новости для внесения изменений";
         }
 
-        if (!isset($_POST['a-title']) or empty($_POST['a-title']) or strlen($_POST['a-title']) < 3 or strlen($_POST['a-title']) > 50) {
+        if (!isset($_POST['a-title']) or empty($_POST['a-title']) or mb_strlen($_POST['a-title'], 'utf-8') < 3 or mb_strlen($_POST['a-title'], 'utf-8') > 50) {
             $errors[] = "У новости должно быть название, длиной от 3 до 50 символов";
         }
-        if (!isset($_POST['a-text']) or empty($_POST['a-text']) or strlen($_POST['a-text']) < 10 or strlen($_POST['a-text']) > 140) {
+        if (!isset($_POST['a-text']) or empty($_POST['a-text']) or mb_strlen($_POST['a-text'], 'utf-8') < 10 or mb_strlen($_POST['a-text'], 'utf-8') > 140) {
             $errors[] = "У новости должен быть текст, длиной от 10 до 140 символов";
         }
         if (!isset($_POST['a-date']) or empty($_POST['a-date'])) {
@@ -44,8 +44,9 @@ class Model_Edit extends Model
             else
                 $errors[] = "Допустимый формат для даты: дд.мм.ГГГГ";
         }
-
-        $tags = $_POST['a-tag'];
+        $tags = array();
+        if (isset($_POST['a-tag']))
+            $tags = $_POST['a-tag'];
         if (is_array($tags)) {
             $return['tags'] = $tags;
         }
@@ -129,16 +130,25 @@ class Model_Edit extends Model
     {
         $old_file_path = $this->dir . $data['a_old_filepath'];
 
+        $filepath_to_insert = "";
+        if ($data['a_filepath'] == '')
+            $data['a_filepath'] = $data['a_old_filepath'];
+
+
         $data = array_map(function ($v) {
             return "'" . str_replace("'", '"', $v) . "'";
         }, $data);
 
-        $q = "update article set a_title=" . $data['a_title'] . ", a_text=" . $data['a_text'] . ", a_date=" . $data['a_date'] . ", a_filepath=" . $data['a_filepath'] . ", a_hidden=" . $data['a_hidden']  . " where id=" . $data['a_id'];
+        $q = "update article set a_title=" . $data['a_title'] . ", a_text=" . $data['a_text'] . ", a_date=" . $data['a_date'] . ", a_filepath=" .  $data['a_filepath'] . ", a_hidden=" . $data['a_hidden']  . " where id=" . $data['a_id'];
 
         $this->mysqli->query($q);
         if ($this->mysqli->errno) {
             $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
         }
+
+//        echo "<pre>";
+//var_dump($data['a_filepath']);
+//die();
 
         //если файл изменен, удаляю старый файл
         if ($data['a_filepath'] != $data['a_old_filepath'] and $data['a_filepath'] != "''") {
