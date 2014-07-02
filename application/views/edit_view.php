@@ -11,7 +11,12 @@
         <tr><td align="right"><label>Теги</label></td><td><select name="a-tag[]" size="10" multiple>
                     <?php
                         foreach ($data['tag'] as $tag) {
-                            echo "<option value='" . $tag['id'] . "'>" . $tag['t_name'] . "</option>";
+                            $option = "";
+                            $option .= "<option value='" . $tag['id'] . "'";
+                            if ($tag['selected'] == 1)
+                                $option .= " selected='selected'";
+                            $option .= "'>" . $tag['t_name'] . "</option>";
+                            echo $option;
                     } ?>
 
         </select></td></tr>

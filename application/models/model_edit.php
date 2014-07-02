@@ -122,6 +122,23 @@ class Model_Edit extends Model
                 $result->free();
             }
 
+            $query = "select tag_id from at_dict where article_id=$article_id";
+            if ($result = $this->mysqli->query($query)) {
+
+                while ($row = $result->fetch_assoc()) {
+                    foreach($data_to_paste['tag'] as &$tag) {
+                        if ($tag['id'] == $row['tag_id'])
+                            $tag['selected'] = 1;
+                    }
+
+                }
+
+                $result->free();
+            }
+//            echo "<pre>";
+//print_r($data_to_paste);
+//die();
+
             return $data_to_paste;
         }
     }
