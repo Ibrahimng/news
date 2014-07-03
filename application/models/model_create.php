@@ -5,10 +5,13 @@ class Model_Create extends Model
     public function set_data()
     {
         $info = "";
+        $return = array(
+            'errors' => array(),
+            'tags' => array()
+        );
         if (isset($_POST['add'])) {
 
         $dir = './upload/';
-
         $errors = array();
 
         if (!isset($_POST['a-title']) or empty($_POST['a-title']) or mb_strlen($_POST['a-title'], 'utf-8') < 3 or mb_strlen($_POST['a-title'], 'utf-8') > 50) {
@@ -22,6 +25,13 @@ class Model_Create extends Model
         }
         else {
             $unix_time = strtotime($_POST['a-date']);
+        }
+
+        $tags = array();
+        if (isset($_POST['a-tag']))
+            $tags = $_POST['a-tag'];
+        if (is_array($tags)) {
+            $return['tags'] = $tags;
         }
 
         //если есть файл
@@ -62,11 +72,34 @@ class Model_Create extends Model
             if ($this->mysqli->errno) {
                 $info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
             }
+
+            $new_article_id = $this->mysqli->insert_id;
+
+            //сохраним в базе информацию о тегах
+            foreach ($tags as $key => $value) {
+                $q = "insert into at_dict (article_id, tag_id) values (" . $new_article_id . "," . $value . ")";
+                $this->mysqli->query($q);
+                if ($this->mysqli->errno) {
+                    $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
+                }
+            }
             header ("Location: /");
         }
-        return $errors;
+        else
+            $return['errors'] = $errors;
 }
+        $query = "select * from tag";
+        if ($result = $this->mysqli->query($query)) {
 
+            while ($row = $result->fetch_assoc()) {
+
+                array_push($return['tags'], $row);
+
+            }
+
+            $result->free();
+        }
+        return $return;
 
     }
 }

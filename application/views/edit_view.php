@@ -13,7 +13,7 @@
                         foreach ($data['tag'] as $tag) {
                             $option = "";
                             $option .= "<option value='" . $tag['id'] . "'";
-                            if ($tag['selected'] == 1)
+                            if (isset($tag['selected']) and $tag['selected'] == 1)
                                 $option .= " selected='selected'";
                             $option .= "'>" . $tag['t_name'] . "</option>";
                             echo $option;

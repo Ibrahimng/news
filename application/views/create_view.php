@@ -6,12 +6,21 @@
     <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title"></td></tr>
     <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
     <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"></textarea></td></tr>
+    <td align="right"><label>Теги</label></td><td><select name="a-tag[]" size="10" multiple>
+            <?php
+            foreach ($data['tags'] as $tag) {
+
+                echo "<option value='" . $tag['id'] . "'>" . $tag['t_name'] . "</option>";
+
+            } ?>
+
+        </select></td>
     <tr><td></td><td><input type="submit" name="add" value="Добавить"></td></tr>
     </table>
 </form>
 <div class="error">
-<?php if(isset($data)){
-        foreach($data as $msg)
+<?php if(isset($data['errors'])){
+        foreach($data['errors'] as $msg)
             echo $msg."<br>";
         } ?>
 </div>

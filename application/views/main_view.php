@@ -24,7 +24,7 @@
                     if ($row['a_hidden'] == 0) {
                         $tags = "";
                         foreach ($row['tags'] as $t_key => $t_value) {
-                            $tags .= "<a href='" . $t_value['t_id'] . "'>" . $t_value['t_name'] . "</a><br>";
+                            $tags .= "<a href='/main/index/?tag=" . $t_value['t_id'] . "'>" . $t_value['t_name'] . "</a><br>";
                         }
 
                         echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='/upload/" . $row['a_filepath'] . "'></td><td>".  $tags."</td><td><a href='/edit/index/?id=" . $row['id'] . "'>Изменить</a></td><td><a onclick='return confirmDelete();' href='/delete/index/?id=" . $row['id'] . "'>Удалить</a></td></tr>";
@@ -49,7 +49,7 @@
                     if ($row['a_hidden'] == 1) {
                         $tags = "";
                         foreach ($row['tags'] as $t_key => $t_value) {
-                            $tags .= "<a href='" . $t_value['t_id'] . "'>" . $t_value['t_name'] . "</a><br>";
+                            $tags .= "<a href='/main/index/?tag=" . $t_value['t_id'] . "'>" . $t_value['t_name'] . "</a><br>";
                         }
 
                         echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='/upload/" . $row['a_filepath'] . "'></td><td>".  $tags."</td><td><a href='/edit/index/?id=" . $row['id'] . "'>Изменить</a></td><td><a onclick='return confirmDelete();' href='/delete/index/?id=" . $row['id'] . "'>Удалить</a></td></tr>";
