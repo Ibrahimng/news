@@ -1,6 +1,6 @@
 
 <h1>Добавьте новость по вкусу</h1>
-<form id="new-article-form" name="new-article" enctype="multipart/form-data" action="create" method="post">
+<form id="new-article-form" name="new-article" enctype="multipart/form-data" action="/article/create" method="post">
     <table id="add-article">
     <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date"></td></tr>
     <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title"></td></tr>

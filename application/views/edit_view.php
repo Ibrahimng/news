@@ -1,6 +1,6 @@
 
 <h1>Редактирование новости</h1>
-<form id="new-article-form" name="edit-article" enctype="multipart/form-data" action="/edit" method="post">
+<form id="new-article-form" name="edit-article" enctype="multipart/form-data" action="/article/edit" method="post">
     <table id="add-article">
         <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo date("d.m.Y", strtotime($data['article']['a_date'])); ?>'></td></tr>
         <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title" value='<?php echo $data['article']['a_title'];?>'></td></tr>
