@@ -1,15 +1,4 @@
-<script>
-    function confirmDelete() {
-        if (confirm("Вы уверены, что хотите удалить её к херам?")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-</script>
-<h1><a href="/">Новости</a></h1>
-<a href="article/create">Добавить новость</a>
-
+<div id="content">
 <div class="korpus">
     <input type="radio" name="odin" checked="checked" id="vkl1"/><a href="/main/index"><label for="vkl1">Актуальные</label></a><input type="radio" name="odin" id="vkl2"/><a href="/main/indexh"><label for="vkl2">Скрытые</label></a>
     <div>
@@ -63,6 +52,7 @@
         </table>
 
     </div>
+</div>
 </div>
 <script>
     function confirmDelete() {

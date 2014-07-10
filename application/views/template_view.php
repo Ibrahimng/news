@@ -14,6 +14,7 @@
     <title>Главная</title>
 </head>
 <body>
+    <div id="header"><p class="menu-item"><a href="/">Главная</a></p><p class="menu-item"><a href="<?php $_SERVER['SERVER_NAME'];?>/article/create">Добавить новость</a></p></div>
     <?php include 'application/views/'.$content_view; ?>
 </body>
 </html>
