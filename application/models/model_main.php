@@ -2,14 +2,16 @@
 
 class Model_Main extends Model
 {
-    public function get_data($h_flag = 0)
+    public function get_data($active)
     {
         $return = array();
         $articles = array();
 
         $query = "select article.id, a_date, a_title, a_text, a_filepath, a_hidden, tag.id as tag_id, tag.t_name from article left join at_dict on article.id = at_dict.article_id  left join tag on at_dict.tag_id = tag.id";
 
-        if ($h_flag)
+        if ($active)
+            $query .= " where a_hidden=0";
+        else
             $query .= " where a_hidden=1";
 
         if ($result = $this->mysqli->query($query)) {
@@ -48,15 +50,19 @@ class Model_Main extends Model
         return $articles;
     }
 
-    public function get_data_by_tag()
+    public function get_data_by_tag($active)
     {
-        $return = array();
         $articles = array();
         $in_clause = "";
 
         $tag_id = (int)mysql_real_escape_string($_GET['tag']);
 
         $query = "select article.id, a_date, a_title, a_text, a_filepath, a_hidden from article left join at_dict on article.id = at_dict.article_id left join tag on at_dict.tag_id = tag.id where tag.id=$tag_id";
+
+        if ($active)
+            $query .= " and article.a_hidden=0";
+        else
+            $query .= " and article.a_hidden=1";
 
         if ($result = $this->mysqli->query($query)) {
 
