@@ -5,7 +5,10 @@
         <tr><td align="right"><label>Дата:</label></td><td><input id="adate" class="datepicker" type="text" name="a-date" value='<?php echo date("d.m.Y", strtotime($data['article']['a_date'])); ?>'></td></tr>
         <tr><td align="right"><label>Заголовок:</label></td><td><input size="65" id="atitle" type="text" name="a-title" value='<?php echo $data['article']['a_title'];?>'></td></tr>
         <tr><td align="right"><label>Фотография:</label></td><td><input type="file" name="a-file"></td></tr>
-        <tr><td></td><td><img src='/upload/<?php echo $data['article']['a_filepath'];?>'> </td></tr>
+        <tr><td></td><td><img src='<?php    if ($data['article']['a_filepath'] == '')
+                                                echo '/default-image.gif';
+                                            else
+                                                echo '/upload/' . $data['article']['a_filepath'];?>'> </td></tr>
         <tr><td align="right" valign="top"><label>Текст:</label></td><td><textarea id="atext" name="a-text" cols="50" rows="10"><?php echo $data['article']['a_text'];?></textarea></td></tr>
         <tr><td align="right"><label>Скрытая</label></td><td><input type="checkbox" name="a-hidden" value="1" <?php if($data['article']['a_hidden'] == "1") { echo " checked";}?> /></td></tr>
         <tr><td align="right"><label>Теги</label></td><td><select name="a-tag[]" size="10" multiple>

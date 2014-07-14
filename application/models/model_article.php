@@ -2,16 +2,20 @@
 
 class Model_Article extends Model
 {
+
+    public $dir = './upload/';
+    public $info = "";
+    public $default_image = "default-image.gif";
+
     public function set_data()
     {
+
         $info = "";
         $return = array(
             'errors' => array(),
             'tags' => array()
         );
         if (isset($_POST['add'])) {
-
-            $dir = './upload/';
             $errors = array();
 
             if (!isset($_POST['a-title']) or empty($_POST['a-title']) or mb_strlen($_POST['a-title'], 'utf-8') < 3 or mb_strlen($_POST['a-title'], 'utf-8') > 50) {
@@ -42,7 +46,7 @@ class Model_Article extends Model
 
                 if($error_code == 0) {
                     $upfile_name = "photo_" . time() . ".jpg";
-                    move_uploaded_file($upfile, $dir . $upfile_name);
+                    move_uploaded_file($upfile, $this->dir . $upfile_name);
                     $a_filepath = $upfile_name;
                 }
                 else {
@@ -103,12 +107,8 @@ class Model_Article extends Model
 
     }
 
-    public $dir = './upload/';
-    public $info = "";
     public function validate($data = array()) {
 
-
-        echo "<pre>";
         $errors = array();
         $return = array(
             'error'  => 1,
@@ -243,12 +243,18 @@ class Model_Article extends Model
 
     public function update_article($data, $tags)
     {
-        $old_file_path = $this->dir . $data['a_old_filepath'];
-
         $filepath_to_insert = "";
         if ($data['a_filepath'] == '')
             $data['a_filepath'] = $data['a_old_filepath'];
 
+        //если файл изменен, удаляю старый файл
+        if ($data['a_old_filepath'] != '')
+        {
+            $old_file_path = $this->dir . $data['a_old_filepath'];
+            if ($data['a_filepath'] != $data['a_old_filepath'] and $data['a_filepath'] != "''") {
+                unlink($old_file_path);
+            }
+        }
 
         $data = array_map(function ($v) {
             return "'" . str_replace("'", '"', $v) . "'";
@@ -261,18 +267,8 @@ class Model_Article extends Model
             $this->info .= 'Select Error (' . $this->mysqli->errno . ') ' . $this->mysqli->error;
         }
 
-        //если файл изменен, удаляю старый файл
-        if ($data['a_filepath'] != $data['a_old_filepath'] and $data['a_filepath'] != "''") {
-//            echo "<pre>";
-//            var_dump($old_file_path);
-//            var_dump($data['a_filepath']);
-//            print_r($data['a_filepath'] != "''");
-//            die();
-            unlink($old_file_path);
-        }
-//        echo "<pre>";
-//        var_dump($tags);
-//        die();
+
+
         //удалим все старые записи о тегах
         $q = "delete from at_dict where article_id=" . $data['a_id'];
         $this->mysqli->query($q);

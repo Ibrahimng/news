@@ -22,7 +22,7 @@
                                 $tags .= "<a href='/main/index/?type=tag&active=0&tag=" . $t_value['t_id'] . "'>" . $t_value['t_name'] . "</a><br>";
                         }
 
-                        echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='/upload/" . $row['a_filepath'] . "'></td><td>".  $tags."</td><td><a href='/article/edit/?id=" . $row['id'] . "'>Изменить</a></td><td><a onclick='return confirmDelete();' href='/article/delete/?id=" . $row['id'] . "'>Удалить</a></td></tr>";
+                        echo '<tr><td>'. $row['id'] .'</td><td>'.$row['a_title'].'</td><td>'.$row['a_text'].'</td><td>' . date("d.m.Y" ,strtotime($row['a_date'])) . "</td><td><img src='" . (($row['a_filepath'] == '') ? '/default-image.gif' : ('/upload/' . $row['a_filepath']) ) . "'></td><td>".  $tags."</td><td><a href='/article/edit/?id=" . $row['id'] . "'>Изменить</a></td><td><a onclick='return confirmDelete();' href='/article/delete/?id=" . $row['id'] . "'>Удалить</a></td></tr>";
 
 
 

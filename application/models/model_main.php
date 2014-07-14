@@ -83,9 +83,7 @@ class Model_Main extends Model
             $result->free();
         }
 
-//                echo "<pre>";
-//        print_r($articles);
-//        die();
+        App::array_log($articles);
 
         $clause_length = strlen($in_clause);
         if ($clause_length > 0) {
