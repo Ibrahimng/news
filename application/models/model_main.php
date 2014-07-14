@@ -7,12 +7,43 @@ class Model_Main extends Model
         $return = array();
         $articles = array();
 
-        $query = "select article.id, a_date, a_title, a_text, a_filepath, a_hidden, tag.id as tag_id, tag.t_name from article left join at_dict on article.id = at_dict.article_id  left join tag on at_dict.tag_id = tag.id";
+        $start = 0;
+        $limit = 2;
+        $elem_count = 0;
+        $pages_count = 1;
+        $current_page = 1;
+
+        if (isset($_GET['page']))
+        {
+            $current_page = $_GET['page'];
+            if ($current_page > 1)
+                $start += $limit * ($current_page - 1);
+        }
+        $query = "select count(*) as elem_count from article";
 
         if ($active)
             $query .= " where a_hidden=0";
         else
             $query .= " where a_hidden=1";
+
+        if ($result = $this->mysqli->query($query)) {
+
+            /* извлечение ассоциативного массива */
+        $row = $result->fetch_assoc();
+        }
+        $elem_count = $row['elem_count'];
+        $pages_count = round($elem_count / $limit);
+
+
+        $query = "select * from (select article.id, a_date, a_title, a_text, a_filepath, a_hidden, tag.id as tag_id, tag.t_name from article limit 0,10) as art_table left join at_dict on art_table.id = at_dict.article_id  left join tag on at_dict.tag_id = tag.id";
+
+        if ($active)
+            $query .= " where a_hidden=0";
+        else
+            $query .= " where a_hidden=1";
+
+//        $query .= " limit $start, $limit";
+        App::pr($query);
 
         if ($result = $this->mysqli->query($query)) {
 
