@@ -1,6 +1,8 @@
 <div id="content">
-<div>
-    <a href="/">Актуальные</a><a href="/main/index/?active=0">Скрытые</a>
+
+    <a class="button-link" href="/"><div class="filter">Актуальные</div></a>
+    <a class="button-link" href="/main/index/?active=0"><div class="filter">Скрытые</div></a>
+    <a class="button-link" href="<?php $_SERVER['SERVER_NAME'];?>/article/create"><div class="add-new">Добавить новость</div></a>
     <div>
         <table class="news-list">
             <tr><th>ID</th><th>Название</th><th>Текст</th><th>Дата</th><th>Изображение</th><th>Теги</th></tr>
@@ -31,28 +33,36 @@
 
 
                 }
-                if ($data['pageCount'] > 1)
-                {
-                    echo "<ul>";
-                    for ($i = 0; $i < $data['pageCount']; $i++)
-                    {
-                        if ($data['active'])
-                            echo "<li><a href='/main/index/?page=" . ($i + 1) . "'>" . ($i + 1) . "</a>";
-                        else
-                            echo "<li><a href='/main/index/?active=0&page=" . ($i + 1) . "'>" . ($i + 1) . "</a>";
-                    }
-                    echo "</ul>";
-                }
+
 
             ?>
             </tbody>
         </table>
+        <?php
+            if ($data['pageCount'] > 1)
+            {
+                echo "<ul class='paging'>";
+                for ($i = 0; $i < $data['pageCount']; $i++)
+                {
+                    $li = "<li><a class='a-paging' href='/main/index/?";
+                    if (!$data['active'])
+                        $li .= "active=0&";
+                    if ($data['type'] == 'tag')
+                        $li .= "type=tag&";
+                    if (isset($data['tag']) && $data['tag'] != '')
+                        $li .= "tag=" . $data['tag'] . "&";
+                    $li .= "page=" . ($i + 1) . "'>" . ($i + 1) . "</a>";
+                    echo $li;
+                }
+                echo "</ul>";
+            }
+
+        ?>
     </div>
-</div>
 </div>
 <script>
     function confirmDelete() {
-        if (confirm("Вы уверены, что хотите удалить её к херам?")) {
+        if (confirm("Вы уверены, что хотите удалить эту новость?")) {
             return true;
         } else {
             return false;

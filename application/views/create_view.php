@@ -1,4 +1,4 @@
-
+<div id="content">
 <h1>Добавьте новость по вкусу</h1>
 <form id="new-article-form" name="new-article" enctype="multipart/form-data" action="/article/create" method="post">
     <table id="add-article">
@@ -23,6 +23,7 @@
         foreach($data['errors'] as $msg)
             echo $msg."<br>";
         } ?>
+</div>
 </div>
 <script>
     $(document).ready(function() {

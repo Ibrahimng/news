@@ -16,8 +16,6 @@ class Model_Main extends Model
 
         $start = 0;
         $limit = 2;
-        $elem_count = 0;
-        $pages_count = 1;
         $current_page = 1;
 
 
@@ -119,10 +117,57 @@ class Model_Main extends Model
 
     public function get_data_by_tag($active)
     {
+//        App::pr("test");
+        $return = array(
+            'articles' => array(),
+            'pagesCount' => 1,
+            'currentPage' => 1,
+            'active' => 1,
+            'type' => '',
+            'tag' => ''
+        );
         $articles = array();
         $in_clause = "";
 
+        $start = 0;
+        $limit = 2;
+        $current_page = 1;
+        $articles = array();
+
+        if (isset($_GET['page']))
+        {
+            $current_page = $_GET['page'];
+            if ($current_page > 1)
+                $start += $limit * ($current_page - 1);
+        }
+
         $tag_id = (int)mysql_real_escape_string($_GET['tag']);
+
+
+        $query = "select count(*) as elem_count from article left join at_dict on article.id = at_dict.article_id left join tag on at_dict.tag_id = tag.id where tag.id=$tag_id";
+
+        if ($active)
+        {
+            $query .= " and a_hidden=0";
+        }
+        else
+        {
+            $return['active'] = 0;
+            $query .= " and a_hidden=1";
+        }
+
+        if ($result = $this->mysqli->query($query)) {
+
+            /* извлечение ассоциативного массива */
+            $row = $result->fetch_assoc();
+        }
+        $elem_count = $row['elem_count'];
+        $pages_count = round($elem_count / $limit);
+
+
+
+
+
 
         $query = "select article.id, a_date, a_title, a_text, a_filepath, a_hidden from article left join at_dict on article.id = at_dict.article_id left join tag on at_dict.tag_id = tag.id where tag.id=$tag_id";
 
@@ -130,6 +175,8 @@ class Model_Main extends Model
             $query .= " and article.a_hidden=0";
         else
             $query .= " and article.a_hidden=1";
+
+        $query .= " limit $start, $limit";
 
         if ($result = $this->mysqli->query($query)) {
 
@@ -149,8 +196,6 @@ class Model_Main extends Model
             /* удаление выборки */
             $result->free();
         }
-
-        App::array_log($articles);
 
         $clause_length = strlen($in_clause);
         if ($clause_length > 0) {
@@ -176,7 +221,11 @@ class Model_Main extends Model
 //        print_r($articles);
 //        die();
         //-------------------------------------------------------
-
-        return $articles;
+        $return['tag'] = $tag_id;
+        $return['type'] = 'tag';
+        $return['articles'] = $articles;
+        $return['pageCount'] = $pages_count;
+        $return['currentPage'] = $current_page;
+        return $return;
     }
 }

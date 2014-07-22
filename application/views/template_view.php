@@ -14,7 +14,16 @@
     <title>Главная</title>
 </head>
 <body>
-    <div id="header"><p class="menu-item"><a href="/">Главная</a></p><p class="menu-item"><a href="<?php $_SERVER['SERVER_NAME'];?>/article/create">Добавить новость</a></p></div>
+    <div id="header">
+        <a class="button-link" href="/"><div class="menu-item">Новости</div></a>
+        <a class="button-link" href="<?php $_SERVER['SERVER_NAME'];?>/tag"><div class="menu-item">Тэги</div></a>
+    </div>
     <?php include 'application/views/'.$content_view; ?>
+    <div id="space"></div>
+    <div id="footer">
+        <p>
+            &copy 2014 Maxibello
+        </p>
+    </div>
 </body>
 </html>
